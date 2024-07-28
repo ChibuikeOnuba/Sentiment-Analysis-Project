@@ -1,8 +1,8 @@
-name: Daily ETL
+name: Weekly ETL
 
 on:
   schedule:
-    - cron: "0 12 * * 1"  # Runs every Monday at noon UTC
+    - cron: "0 12 * * 4"  # Runs every Thursday at noon UTC
   workflow_dispatch:  
 
 jobs:
@@ -119,6 +119,6 @@ jobs:
             Commit Message: ${{ github.event.head_commit.message }}
 
             Please check the logs for more details.
-          to: 'chideraozigbo@gmail.com, honordaniel987@gmail.com, onubawinner042@gmail.com'
+          to: 'chideraozigbo@gmail.com, honourdaniel987@gmail.com, onubawinner042@gmail.com'
           from: Auto-Reports
           content_type: text/plain

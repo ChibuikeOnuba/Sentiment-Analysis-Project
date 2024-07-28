@@ -2,29 +2,31 @@
 
 ## Table of Contents
 1. [Project Overview](#project-overview)
-2. [Selected Brand: Moniepoint](#selected-brand-moniepoint)
+2. [Selected Brand: PiggyVest](#selected-brand-piggvest)
 3. [Objectives](#objectives)
 4. [Contributors](#contributors)
 5. [Team Members Task](#team-members-task)
-6. [Why Choosing Moniepoint](#why-moniepoint-was-chosen)
+6. [Project Timeline](#project-timeline)
+7. [Why Choosing Piggyvest](#why-piggyvest-was-chosen)
    - [Proposed Brand](#proposed-brands)
-5. [System Architecture](#system-architecture)
-6. [Technology Stack](#technology-stack)
-7. [Dependencies](#dependencies)
-8. [File Structure](#file-structure)
-9. [Dataset Breakdown](#)
-10. [Important Links](#important-links)
-11. [ETL Scripts Details](#)
-12. [GitHub Actions](#github-actions)
-13. [Setup Instructions](#setup-instructions)
-14. [IAM Configuration](#iam-configuration)
+8. [System Architecture](#system-architecture)
+9. [Technology Stack](#technology-stack)
+10. [Dependencies](#dependencies)
+11. [File Structure](#file-structure)
+12. [Dataset Breakdown](#dataset-breakdown)
+13. [Important Links](#important-links)
+14. [ETL Scripts Details](#etl-script-details)
+15. [GitHub Actions](#github-actions)
+16. [Setup Instructions](#setup-instructions)
+17. [IAM Configuration](#iam-configuration-guide)
 
 ## Project Overview
 This project aims to perform sentiment analysis on Twitter data to provide insights into public sentiment towards a specific brand. The pipeline involves extracting data from the Twitter API, transforming the raw data into structured formats, and loading the processed data into an AWS S3 bucket. Snowpipe listens for new files in the S3 bucket and loads them into a Snowflake data warehouse for further analysis. The orchestration of this pipeline is managed using GitHub Actions due to cost considerations and ease of use.
 
-## Selected Brand: Moniepoint
-### Why Moniepoint?
-Moniepoint is a leading financial technology company known for its innovative solutions in the digital payments space. The choice of Moniepoint was influenced by its significant presence on social media and the growing public interest in its services. By analyzing sentiment around Moniepoint, we aim to gain valuable insights into public perception and identify areas for improvement.
+## Selected Brand: Piggvest
+### Why Piggvest?
+Piggvest is a prominent financial technology company renowned for its innovative savings and investment solutions. The choice of Piggvest was driven by its substantial social media presence and the increasing public interest in its services. By analyzing sentiment around Piggvest, we aim to gain valuable insights into public perception and identify areas for improvement.
+
 
 ## Objectives
 - **Sentiment Analysis:** To gauge public sentiment towards Moniepoint based on Twitter data.
@@ -65,19 +67,70 @@ Moniepoint is a leading financial technology company known for its innovative so
   - Integrated the sentiment analysis models into the ETL pipeline for automated scoring of new tweets.
   - Collaborated with the data analyst to interpret model results and derive actionable insights.
 
-## Why Moniepoint Was Chosen
+## Project Timeline
 
-Moniepoint was selected as the brand for this project due to several compelling reasons:
+Our project is divided into several phases, with tasks distributed among team members based on their roles. Here's a breakdown of our timeline:
 
-1. **Market Presence:** Moniepoint has a significant presence in the financial technology sector, making it a relevant and impactful brand to analyze.
+### Week 1-2: Project Setup and Infrastructure
+- **Chidera Ozigbo (Data Engineer)**: 
+  - Set up GitHub repository
+  - Design and implement system architecture
+  - Configure AWS S3 bucket
+  - Set up Snowflake data warehouse
+  - Implement Twitter API connection
+  - Set up GitHub Actions for automated runs
+
+### Week 3-4: Data Extraction and Processing
+- **Chidera Ozigbo (Data Engineer)**: 
+  - Develop data extraction script
+  - Implement error handling and logging
+  - Create data cleaning and transformation pipeline
+  - Develop data validation checks
+  - Implement Snowpipe for data ingestion
+  - Optimize ETL pipeline for performance
+
+### Week 5-6: Data Analysis and Visualization
+- **Honor Daniel (Data Analyst)**: 
+  - Conduct exploratory data analysis
+  - Develop SQL queries for initial insights
+  - Design dashboard layout
+  - Implement dashboard using chosen visualization tool
+  - Create visualization scripts
+- **Onuba Winner (Data Scientist)**: 
+  - Implement sentiment analysis using TextBlob
+  - Develop advanced SQL queries for trend analysis
+  - Implement anomaly detection algorithms
+  - Conduct in-depth statistical analysis
+
+### Week 7-8: Final Integration, Documentation, and Presentation
+- **Chidera Ozigbo (Data Engineer)**: 
+  - Integrate all components of the pipeline
+  - Conduct end-to-end testing
+  - Implement security measures and access controls
+  - Prepare deployment documentation
+- **Honor Daniel (Data Analyst)**: 
+  - Finalize dashboard with real-time data updates
+  - Prepare final presentation of insights
+  - Create user guide for dashboard
+- **Onuba Winner (Data Scientist)**: 
+  - Develop predictive models based on sentiment data
+  - Conduct performance evaluation of models
+  - Prepare technical documentation of analysis and models
+
+## Why Piggyvest Was Chosen
+
+Piggyvest was selected as the brand for this project due to several compelling reasons:
+
+1. **Market Presence:** Piggyvest has a significant presence in the financial technology sector, making it a relevant and impactful brand to analyze.
 2. **Customer Interaction:** The brand actively engages with its customers on social media, providing ample data for sentiment analysis and trend identification.
-3. **Growth Potential:** As a growing fintech company, understanding public sentiment and customer feedback is crucial for Moniepoint's strategic decisions and growth.
-4. **Diverse Data:** Moniepoint's interactions on platforms like Twitter provide diverse and rich data, ideal for developing robust sentiment analysis models.
-5. **Business Impact:** Insights gained from this analysis can help Moniepoint improve customer satisfaction, enhance their services, and make data-driven business decisions.
+3. **Growth Potential:** As a growing fintech company, understanding public sentiment and customer feedback is crucial for Piggyvest's strategic decisions and growth.
+4. **Diverse Data:** Piggyvest's interactions on platforms like Twitter provide diverse and rich data, ideal for developing robust sentiment analysis models.
+5. **Innovative Solutions:** Piggyvest is known for its innovative savings and investment solutions, making it an interesting subject for analyzing customer sentiment and feedback.
+
 
 ### Proposed Brands
 
-Here are the lists of brands that was considered before we chose Moniepoint.
+Here are the lists of brands that was considered before we chose Piggvest.
 
 1. Cowrywise
 2. MTN
@@ -99,7 +152,7 @@ Data Flow:
 3.	Data Transformation: The raw data is transformed into structured CSV files, which are saved in the 'data/processed/' directory.
 4.	Data Loading: The raw and processed data files are uploaded to an AWS S3 bucket.
 5.	Data Ingestion: Snowpipe listens to the S3 bucket for new files and loads them into a Snowflake data warehouse.
-6.	Orchestration: GitHub Actions are used to automate the ETL process, running the script daily and upon code pushes.
+6.	Orchestration: GitHub Actions are used to automate the ETL process, running the script weekly on Tuesdays and sends email anytime a team member pushes a code to the repo.
 
 ### Architecture Diagram:
 
@@ -109,7 +162,7 @@ Data Flow:
 
 GitHub Actions
 - Reason for Use: GitHub Actions is chosen over Apache Airflow for cost-effectiveness and ease of integration with GitHub repositories. Airflow requires a live server to run, which can incur additional costs.
-- Usage: Automates the ETL process, running the script daily and notifies the team on code pushes.
+- Usage: Automates the ETL process, running the script weekly and notifies the team on code pushes.
 
 Twitter API
 - Reason for Use: Provides access to real-time tweet data.
@@ -127,57 +180,65 @@ Snowflake
 
 This project relies on several Python libraries and modules to perform various tasks, including configuration management, data requests, data processing, and natural language processing (NLP). Below is a detailed breakdown of each dependency:
 
-Configparser
-- Purpose: Used for handling configuration files. It allows the script to read configuration settings from secrets.ini file, which includes API keys and AWS credentials.
-- Usage: Reading API keys and credentials securely from a configuration file.
+- **Configparser**
+  - Purpose: Used for handling configuration files. It allows the script to read configuration settings from `secrets.ini` file, which includes API keys and AWS credentials.
+  - Usage: Reading API keys and credentials securely from a configuration file.
 
-Requests
-- Enables the script to send HTTP requests. It's essential for interacting with APIs, such as the Twitter API.
-- Usage: Fetching data from external APIs.
+- **Requests**
+  - Purpose: Enables the script to send HTTP requests. It's essential for interacting with APIs, such as the Twitter API.
+  - Usage: Fetching data from external APIs.
 
-Pandas
-- Purpose: A powerful data manipulation and analysis library. It provides data structures like DataFrames.
-- Usage: Processing and transforming the extracted data into a structured format for analysis.
+- **Pandas**
+  - Purpose: A powerful data manipulation and analysis library. It provides data structures like DataFrames.
+  - Usage: Processing and transforming the extracted data into a structured format for analysis.
 
-JSON
-- Purpose: Provides methods for parsing JSON formatted data.
-- Usage: Handling JSON responses from APIs.
+- **JSON**
+  - Purpose: Provides methods for parsing JSON formatted data.
+  - Usage: Handling JSON responses from APIs.
 
-Datetime
-- Purpose: Supplies classes for manipulating dates and times.
-- Usage: Managing timestamps for logging and data processing.
+- **Datetime**
+  - Purpose: Supplies classes for manipulating dates and times.
+  - Usage: Managing timestamps for logging and data processing.
 
-Hashlib
-- Purpose: Implements secure hash algorithms.
-- Usage: Creating unique hashes for tweets to avoid processing duplicates.
+- **Hashlib**
+  - Purpose: Implements secure hash algorithms.
+  - Usage: Creating unique hashes for tweets to avoid processing duplicates.
 
-Re(Regular Expressions)
-- Purpose: Provides support for regular expressions.
-- Usage: Cleaning and preprocessing text data.
+- **Re (Regular Expressions)**
+  - Purpose: Provides support for regular expressions.
+  - Usage: Cleaning and preprocessing text data.
 
-Emoji
-- Purpose: Allows the handling of emojis in text.
-- Usage: Detecting and removing or interpreting emojis in tweets.
+- **Emoji**
+  - Purpose: Allows the handling of emojis in text.
+  - Usage: Detecting and removing or interpreting emojis in tweets.
 
-Textblob
-- Purpose: A simple NLP library built on NLTK and Pattern.
-- Usage: Lemmatization and text processing.
+- **Textblob**
+  - Purpose: A simple NLP library built on NLTK and Pattern.
+  - Usage: Lemmatization and text processing.
 
-NLTK (Natural Language Toolkit)
-- Purpose: A comprehensive library for NLP.
-- Usage: Tokenizing text and removing stopwords.
+- **NLTK (Natural Language Toolkit)**
+  - Purpose: A comprehensive library for NLP.
+  - Usage: Tokenizing text and removing stopwords.
 
-Boto3
-- Purpose: The Amazon Web Services (AWS) SDK for Python. It enables Python developers to create, configure, and manage AWS services.
-- Usage: Interacting with AWS services like S3.
+- **Boto3**
+  - Purpose: The Amazon Web Services (AWS) SDK for Python. It enables Python developers to create, configure, and manage AWS services.
+  - Usage: Interacting with AWS services like S3.
 
-OS
-- Purpose: Provides a way of using operating system dependent functionality.
-- Usage: Handling file paths and environment variables.
+- **OS**
+  - Purpose: Provides a way of using operating system dependent functionality.
+  - Usage: Handling file paths and environment variables.
 
-Botocore Exceptions
-- Purpose: Provides a base exception class for Boto3.
-- Usage: Handling exceptions when interacting with AWS services.
+- **Botocore Exceptions**
+  - Purpose: Provides a base exception class for Boto3.
+  - Usage: Handling exceptions when interacting with AWS services.
+
+- **Time**
+  - Purpose: Provides various time-related functions.
+  - Usage: Managing delays and handling timing for requests.
+
+- **Requests Exceptions**
+  - Purpose: Provides exception handling for Requests library.
+  - Usage: Handling exceptions when sending HTTP requests.
 
 
 ## File Structure
@@ -217,7 +278,7 @@ File Structure
 ```
 ### File and Directory Descriptions
 - `.github/workflows/`
-  - `daily_etl.yaml`: GitHub Action to run the ETL pipeline daily.
+  - `daily_etl.yaml`: GitHub Action to run the ETL pipeline weekly.
   - `push-notification.yaml`: GitHub Action to send an email to team members whenever any member of the team pushes to the repo.
 - `config/secrets.ini`: Holds API keys and AWS credentials.
 - `data/raw/`: Stores raw JSON data extracted from the Twitter API.
@@ -323,8 +384,8 @@ The `load_to_s3` function uploads files to an AWS S3 bucket. It takes the file p
 The `main` function orchestrates the ETL process by calling the extraction, transformation, and loading functions sequentially. It logs the start and completion of the ETL pipeline.
 
 ## GitHub Actions
-### Daily ETL Workflow
-This workflow runs every Monday at noon UTC and can also be triggered manually. It performs the following steps:
+### Weekly ETL Workflow
+This workflow runs every Thursday at noon UTC and can also be triggered manually. It performs the following steps:
 1. **Checkout repository:** Checks out the code from the repository.
 2. **Set up Python:** Sets up Python 3.11.5.
 3. **Install dependencies:** Installs required Python packages.
@@ -384,8 +445,8 @@ This workflow triggers on every push to any branch and performs the following st
 #### Step 1: Clone the Repository
 First, clone the repository to your local machine using Git:
 ```bash
-git clone https://github.com/Chideraozigbo/sentiment-analysis-project.git
-cd sentiment-analysis-project
+git clone https://github.com/ChibuikeOnuba/Sentiment-Analysis-Project.git
+cd Sentiment-Analysis-Project
 ```
 
 ### 3. Create a Virtual Environment
@@ -473,3 +534,76 @@ git push origin main
 #### Step 1: GitHub Actions Workflows
 
 The project includes GitHub Actions workflows to automate the ETL process. Ensure that your GitHub repository is set up with the necessary secrets as described above.
+
+
+## IAM Configuration Guide
+
+Here are the steps I took for create my IAM Configuration
+
+### Step 1: Create the IAM User Group
+1. **Sign in to the [AWS Management Console](https://console.aws.amazon.com/console/home?nc2=h_ct&src=header-signin).**
+2. **Open the IAM console** by searching for "IAM" in the Services menu.
+3. In the left navigation pane, choose **"User groups."**
+4. Choose **"Create group."**
+5. In the **"Group name"** field, enter `DataTeam`.
+6. Skip the step to attach policies for now and choose **"Create group."**
+
+### Step 2: Create the IAM Policy for Read-Only Access to the S3 Bucket
+1. In the IAM console, in the left navigation pane, choose **"Policies."**
+2. Choose **"Create policy."**
+3. Select the **"JSON"** tab and paste the following policy document:
+
+    ```json
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "s3:GetObject",
+                    "s3:ListBucket"
+                ],
+                "Resource": [
+                    "arn:aws:s3:::sentimentanalysisprojectpipeline",
+                    "arn:aws:s3:::sentimentanalysisprojectpipeline/*"
+                ]
+            }
+        ]
+    }
+    ```
+4. Choose **"Next: Tags"** (you can skip adding tags).
+5. Choose **"Next: Review."**
+6. In the **"Name"** field, enter `S3ReadOnlySentimentAnalysis`.
+7. Review the policy and choose **"Create policy."**
+
+### Step 3: Attach the Policy to the User Group
+1. In the IAM console, in the left navigation pane, choose **"User groups."**
+2. Choose the `DataTeam` group you created.
+3. In the **"Permissions"** tab, choose **"Add permissions."**
+4. Choose **"Attach policies directly."**
+5. Search for the `S3ReadOnlySentimentAnalysis` policy you created.
+6. Select the policy and choose **"Next: Review."**
+7. Choose **"Add permissions."**
+
+### Step 4: Create the IAM Users
+1. In the IAM console, in the left navigation pane, choose **"Users."**
+2. Choose **"Add user."**
+3. In the **"User name"** field, enter `DataScientist`.
+4. Select the **"AWS Management Console access"** checkbox.
+5. Choose **"Custom password"** and enter a password (ensure to store it securely).
+6. Choose **"Next: Permissions."**
+7. On the **"Set permissions"** page, choose **"Add user to group."**
+8. Select the `DataTeam` group.
+9. Choose **"Next: Tags"** (you can skip adding tags).
+10. Choose **"Next: Review."**
+11. Choose **"Create user."**
+12. Repeat these steps to create the `DataAnalyst` user.
+
+### Step 5: Add the Users to the Group
+1. In the IAM console, in the left navigation pane, choose **"Users."**
+2. Choose the `DataScientist` user.
+3. In the **"User groups"** tab, choose **"Add user to groups."**
+4. Select the `DataTeam` group.
+5. Choose **"Add to group."**
+
+
