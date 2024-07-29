@@ -29,8 +29,8 @@ Piggvest is a prominent financial technology company renowned for its innovative
 
 
 ## Objectives
-- **Sentiment Analysis:** To gauge public sentiment towards Moniepoint based on Twitter data.
-- **Data Insights:** To provide actionable insights that can help improve Moniepoint's services.
+- **Sentiment Analysis:** To gauge public sentiment towards Piggvest based on Twitter data.
+- **Data Insights:** To provide actionable insights that can help improve Piggvest's services.
 - **Automation:** To automate the data extraction, transformation, and loading (ETL) process.
 
 ## Contributors
@@ -52,7 +52,7 @@ Piggvest is a prominent financial technology company renowned for its innovative
 ### Data Analyst
 - **Name:** Honor Daniel
 - **Tasks:**
-  - Analyzed the extracted tweet data to identify trends and insights related to Moniepoint.
+  - Analyzed the extracted tweet data to identify trends and insights related to Piggvest.
   - Created visualizations and dashboards to present the findings to stakeholders.
   - Conducted data validation and cleaning to ensure the accuracy and quality of the data.
   - Worked closely with the data scientist to provide data for model training and evaluation.
@@ -61,7 +61,7 @@ Piggvest is a prominent financial technology company renowned for its innovative
 ### Data Scientist
 - **Name:** Onuba Winner
 - **Tasks:**
-  - Developed sentiment analysis models to assess public sentiment towards Moniepoint.
+  - Developed sentiment analysis models to assess public sentiment towards Piggvest.
   - Trained and evaluated machine learning models using the cleaned tweet data.
   - Fine-tuned the models to improve accuracy and performance.
   - Integrated the sentiment analysis models into the ETL pipeline for automated scoring of new tweets.
@@ -113,7 +113,7 @@ Our project is divided into several phases, with tasks distributed among team me
   - Prepare final presentation of insights
   - Create user guide for dashboard
 - **Onuba Winner (Data Scientist)**: 
-  - Develop predictive models based on sentiment data
+  - Develop predictive models based on sentiment data on Piggvest
   - Conduct performance evaluation of models
   - Prepare technical documentation of analysis and models
 
@@ -148,8 +148,8 @@ Here are the lists of brands that was considered before we chose Piggvest.
 
 Data Flow:
 1.	Data Extraction: Tweets are extracted from the Twitter API using a Python script.
-2.	Data Storage: The raw tweet data is stored as JSON files in the 'data/raw/' directory.
-3.	Data Transformation: The raw data is transformed into structured CSV files, which are saved in the 'data/processed/' directory.
+2.	Data Storage: The raw tweet data is stored as JSON files in the `data/raw/` directory.
+3.	Data Transformation: The raw data is transformed into structured CSV files, which are saved in the `data/processed/` directory.
 4.	Data Loading: The raw and processed data files are uploaded to an AWS S3 bucket.
 5.	Data Ingestion: Snowpipe listens to the S3 bucket for new files and loads them into a Snowflake data warehouse.
 6.	Orchestration: GitHub Actions are used to automate the ETL process, running the script weekly on Tuesdays and sends email anytime a team member pushes a code to the repo.
@@ -371,17 +371,157 @@ File Structure
 
 The `extract_api` function connects to the Twitter API, fetches tweets, and saves them as raw JSON files. It handles pagination and deduplication by checking for processed tweet hashes. The function logs each step, including successful connections and data saving.
 
+### Steps Performed During Extraction
+
+1. **Starting the Extraction Phase:**
+    - Logging the start of the extraction phase.
+    - Setting up the API headers with the required API key and host.
+
+2. **Initializing Query Parameters and Data Structures:**
+    - Defining the query parameters to search for tweets related to "piggyvest".
+    - Initializing an empty list to store all fetched tweet data.
+    - Initializing `next_cursor` to handle pagination.
+    - Loading previously processed tweet hashes to avoid duplicate processing.
+
+3. **Handling Pagination and API Requests:**
+    - Entering a loop to handle pagination and fetch all pages of data.
+    - Updating query parameters with the cursor ID if available and logging the cursor ID.
+
+4. **Retry Logic for API Requests:**
+    - Implementing a retry loop to handle potential API request failures.
+    - Logging the attempt number and waiting before retrying if an error occurs.
+    - Breaking out of the retry loop upon a successful API connection or logging failure after maximum retries.
+
+5. **Processing API Response:**
+    - Parsing the JSON response from the API.
+    - Initializing a set to store new tweet hashes for deduplication.
+
+6. **Deduplicating Tweets:**
+    - Looping through each tweet in the API response.
+    - Generating a hash for each tweet based on its ID and content.
+    - Checking if the tweet hash has already been processed.
+    - Adding unique tweets to the data list and marking duplicate tweets in the logs.
+
+7. **Handling Pagination Continuation:**
+    - Checking for the presence of a `next_cursor` in the API response to continue fetching the next page.
+    - Logging the absence of further pages and breaking the loop when no more data is available.
+
+8. **Saving Raw Data:**
+    - Logging the start of the raw data saving process.
+    - Writing all fetched tweet data to a JSON file in the specified format.
+    - Logging the successful saving of raw data.
+
+9. **Saving Processed Tweet Hashes:**
+    - Saving the hashes of newly processed tweets to a file to avoid reprocessing in future runs.
+    - Logging the completion of the extraction phase.
+
+10. **Returning Data and File Path:**
+    - Returning the fetched tweet data and the path to the saved raw data file.
+
+
 ### Transformation
 
 The `transform` function converts raw tweet data into structured CSV files. It extracts user details and tweet information, cleans the text, removes duplicates, and saves the data into CSV files. The function logs each transformation step and ensures the data is ready for loading.
+
+### Transformations Performed
+
+1. **Initializing Logging and Patterns:**
+    - Logging the start of the transformation phase.
+    - Compiling a regex pattern to extract URLs .
+
+2. **Extracting User and Tweet Details:**
+    - Initializing empty lists for user details and tweets.
+    - Looping through each tweet in the input data to extract user details and tweet information.
+
+3. **Extracting and Cleaning User Information:**
+    - Extracting user details such as `display_name`, `username`, `user_description`, `user_id`, `followers_count`, `favourites_count`, `avatar`, `is_verified`, and `following_count`.
+    - Appending the extracted user information to the `user_details` list.
+
+4. **Extracting and Cleaning Tweet Information:**
+    - Extracting hashtags and converting them to a single string.
+    - Extracting URLs from tweet text using the compiled regex pattern.
+    - Cleaning the tweet text by:
+        - Removing mentions (e.g., `@username`) and URLs.
+        - Removing extra spaces.
+        - Removing non-alphanumeric characters except periods, commas, and apostrophes.
+        - Converting emojis to their text descriptions.
+    - Finding all mentions in the original tweet text.
+    - Logging the number of tweets transformed.
+
+5. **Appending Cleaned Tweet Information:**
+    - Extracting tweet details such as `tweet_id`, `user_id`, `created_at`, `text`, `url`, `mentions`, `lang`, `favorites`, `retweets`, `replies`, `quotes`, `views`, and `hashtags`.
+    - Appending the cleaned tweet information to the `tweets` list.
+
+6. **Converting Lists to DataFrames:**
+    - Converting the `user_details` and `tweets` lists to DataFrames.
+    - Logging the successful conversion of lists to DataFrames.
+
+7. **Removing Duplicate User IDs:**
+    - Logging the initial count of users.
+    - Dropping duplicate user IDs from the `df_users` DataFrame.
+    - Logging the final count of users and the number of duplicate user IDs dropped.
+
+8. **Removing Empty or NaN Text Rows in Tweets:**
+    - Logging the initial count of tweets.
+    - Dropping rows with empty or NaN text in the `df_users_tweet` DataFrame.
+    - Logging the final count of tweets and the number of tweets dropped due to empty or NaN text.
+
+9. **Saving DataFrames to CSV Files:**
+    - Logging the start of the CSV saving process.
+    - Saving the `df_users` and `df_users_tweet` DataFrames to CSV files.
+    - Logging the successful saving of CSV files and the end of the transformation phase.
+
+10. **Returning CSV File Paths:**
+    - Returning the paths to the saved users and tweets CSV files.
 
 ### Loading
 
 The `load_to_s3` function uploads files to an AWS S3 bucket. It takes the file path, bucket name, and object name as arguments and logs the upload process. The function ensures data is available in S3 for Snowpipe to ingest into Snowflake.
 
-### Main Function
+### Steps Performed During Load
 
+1. **Starting the Load Phase:**
+    - Logging the start of the load phase for the specified file path.
+
+2. **Setting the S3 Object Name:**
+    - If the `object_name` is not provided, setting it to the basename of the file path.
+
+3. **Creating an S3 Client:**
+    - Creating an S3 client using the provided AWS access key ID and secret access key.
+
+4. **Uploading the File:**
+    - Attempting to upload the file to the specified S3 bucket and object name.
+    - Logging a success message if the file is uploaded successfully.
+    - Returning `True` to indicate a successful upload.
+
+5. **Handling Upload Errors:**
+    - Catching any `ClientError` exceptions that occur during the upload process.
+    - Logging an error message if the upload fails.
+    - Returning `False` to indicate a failed upload.
+
+### Main Function
 The `main` function orchestrates the ETL process by calling the extraction, transformation, and loading functions sequentially. It logs the start and completion of the ETL pipeline.
+
+### Steps Performed in the ETL Pipeline
+
+1. **Starting the ETL Pipeline:**
+    - Logging the start of the ETL pipeline.
+
+2. **Extraction Phase:**
+    - Calling the `extract_api` function to extract raw tweet data.
+    - Receiving the raw data and the path to the saved raw data file.
+
+3. **Transformation Phase:**
+    - Calling the `transform` function to transform the extracted raw data into structured CSV files.
+    - Receiving the paths to the saved users and tweets CSV files.
+
+4. **Loading Phase:**
+    - Uploading the raw data file to the S3 bucket by calling `load_to_s3`.
+    - Uploading the users CSV file to the S3 bucket by calling `load_to_s3`.
+    - Uploading the tweets CSV file to the S3 bucket by calling `load_to_s3`.
+
+5. **Completing the ETL Pipeline:**
+    - Logging the completion of the ETL pipeline.
 
 ## GitHub Actions
 ### Weekly ETL Workflow
