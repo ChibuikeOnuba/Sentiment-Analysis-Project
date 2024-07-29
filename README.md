@@ -638,7 +638,12 @@ SECRET_ACCESS_KEY = YOUR_AWS_SECRET_ACCESS_KEY
 email_user = YOUR_EMAIL_USER
 email_password = YOUR_EMAIL_PASSWORD(Not your regular gmail password)
 ```
-### 6. Configure Git to Ignore `secrets.ini`
+### 6. Modify `etl.py` File
+
+#### Step 1: Update Bucket Name and Paths
+In the `etl.py` file, update the bucket name and any other necessary configurations to match your setup. Replace any placeholder values with your actual bucket name and paths.
+
+### 7. Configure Git to Ignore `secrets.ini`
 #### Step 1: Update .gitignore
 
 Ensure that your `secrets.ini` file is not tracked by Git by adding it to your `.gitignore` file:
@@ -646,7 +651,7 @@ Ensure that your `secrets.ini` file is not tracked by Git by adding it to your `
 ```bash
 config/secrets.ini
 ```
-### 7. Setup GitHub Secrets
+### 8. Setup GitHub Secrets
 #### Step 1: Add GitHub Secrets
 
 Before pushing to GitHub, add your credentials as secrets to your GitHub repository:
@@ -661,7 +666,7 @@ Before pushing to GitHub, add your credentials as secrets to your GitHub reposit
    - `EMAIL_USER`
    - `EMAIL_PASS`
 
-### 8. Push to GitHub
+### 9. Push to GitHub
 #### Step 1: Commit and Push Code
 
 Make sure you have committed all your changes and pushed the code to GitHub:
@@ -670,7 +675,7 @@ git add .
 git commit -m "Initial commit"
 git push origin main
 ```
-### 9. Automating with GitHub Actions
+### 10. Automating with GitHub Actions
 #### Step 1: GitHub Actions Workflows
 
 The project includes GitHub Actions workflows to automate the ETL process. Ensure that your GitHub repository is set up with the necessary secrets as described above.
