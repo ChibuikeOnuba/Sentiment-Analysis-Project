@@ -369,7 +369,7 @@ File Structure
 
 ### Extraction
 
-The `extract_api` function connects to the Twitter API, fetches tweets, and saves them as raw JSON files. It handles pagination and deduplication by checking for processed tweet hashes. The function logs each step, including successful connections and data saving.
+The `extract_api` function connects to the Twitter API, fetches tweets, and saves them as raw JSON files. It handles pagination and deduplication by checking for processed tweet hashes. The function logs each step, including successful connections and data saving. Additionally, it checks if the data is empty or `None` and logs a message if no data is received or if the data format is unexpected.
 
 ### Steps Performed During Extraction
 
@@ -394,6 +394,7 @@ The `extract_api` function connects to the Twitter API, fetches tweets, and save
 
 5. **Processing API Response:**
     - Parsing the JSON response from the API.
+    - Checking if the data is empty or `None`, or if the expected key (`timeline`) is missing. Logging a message if no data is received or if the data format is unexpected.
     - Initializing a set to store new tweet hashes for deduplication.
 
 6. **Deduplicating Tweets:**
@@ -421,58 +422,62 @@ The `extract_api` function connects to the Twitter API, fetches tweets, and save
 
 ### Transformation
 
-The `transform` function converts raw tweet data into structured CSV files. It extracts user details and tweet information, cleans the text, removes duplicates, and saves the data into CSV files. The function logs each transformation step and ensures the data is ready for loading.
-
-### Transformations Performed
+## Transformations Performed
 
 1. **Initializing Logging and Patterns:**
-    - Logging the start of the transformation phase.
-    - Compiling a regex pattern to extract URLs .
+    - Logs the start of the transformation phase.
+    - Compiles a regex pattern to extract URLs from tweet texts.
 
 2. **Extracting User and Tweet Details:**
-    - Initializing empty lists for user details and tweets.
-    - Looping through each tweet in the input data to extract user details and tweet information.
+    - Initializes empty lists for user details and tweet information.
+    - Loops through each tweet in the input data to extract user details and tweet information.
 
 3. **Extracting and Cleaning User Information:**
-    - Extracting user details such as `display_name`, `username`, `user_description`, `user_id`, `followers_count`, `favourites_count`, `avatar`, `is_verified`, and `following_count`.
-    - Appending the extracted user information to the `user_details` list.
+    - Extracts user details such as `display_name`, `username`, `user_description`, `user_id`, `followers_count`, `favourites_count`, `avatar`, `is_verified`, and `following_count`.
+    - Appends the extracted user information to the `user_details` list.
 
 4. **Extracting and Cleaning Tweet Information:**
-    - Extracting hashtags and converting them to a single string.
-    - Extracting URLs from tweet text using the compiled regex pattern.
-    - Cleaning the tweet text by:
+    - Extracts hashtags and converts them to a single string.
+    - Extracts URLs from tweet text using the compiled regex pattern.
+    - Cleans the tweet text by:
         - Removing mentions (e.g., `@username`) and URLs.
         - Removing extra spaces.
         - Removing non-alphanumeric characters except periods, commas, and apostrophes.
         - Converting emojis to their text descriptions.
-    - Finding all mentions in the original tweet text.
-    - Logging the number of tweets transformed.
+    - Finds all mentions in the original tweet text.
+    - Logs the number of tweets transformed.
 
 5. **Appending Cleaned Tweet Information:**
-    - Extracting tweet details such as `tweet_id`, `user_id`, `created_at`, `text`, `url`, `mentions`, `lang`, `favorites`, `retweets`, `replies`, `quotes`, `views`, and `hashtags`.
-    - Appending the cleaned tweet information to the `tweets` list.
+    - Extracts tweet details such as `tweet_id`, `user_id`, `created_at`, `text`, `url`, `mentions`, `lang`, `favorites`, `retweets`, `replies`, `quotes`, `views`, and `hashtags`.
+    - Appends the cleaned tweet information to the `tweets` list.
 
 6. **Converting Lists to DataFrames:**
-    - Converting the `user_details` and `tweets` lists to DataFrames.
-    - Logging the successful conversion of lists to DataFrames.
+    - Converts the `user_details` and `tweets` lists to DataFrames.
+    - Logs the successful conversion of lists to DataFrames.
 
 7. **Removing Duplicate User IDs:**
-    - Logging the initial count of users.
-    - Dropping duplicate user IDs from the `df_users` DataFrame.
-    - Logging the final count of users and the number of duplicate user IDs dropped.
+    - Logs the initial count of users.
+    - Drops duplicate user IDs from the `df_users` DataFrame.
+    - Logs the final count of users and the number of duplicate user IDs dropped.
 
 8. **Removing Empty or NaN Text Rows in Tweets:**
-    - Logging the initial count of tweets.
-    - Dropping rows with empty or NaN text in the `df_users_tweet` DataFrame.
-    - Logging the final count of tweets and the number of tweets dropped due to empty or NaN text.
+    - Logs the initial count of tweets.
+    - Drops rows with empty or NaN text in the `df_users_tweet` DataFrame.
+    - Logs the final count of tweets and the number of tweets dropped due to empty or NaN text.
 
 9. **Saving DataFrames to CSV Files:**
-    - Logging the start of the CSV saving process.
-    - Saving the `df_users` and `df_users_tweet` DataFrames to CSV files.
-    - Logging the successful saving of CSV files and the end of the transformation phase.
+    - Logs the start of the CSV saving process.
+    - Saves the `df_users` and `df_users_tweet` DataFrames to CSV files.
+    - Logs the successful saving of CSV files and the end of the transformation phase.
 
 10. **Returning CSV File Paths:**
-    - Returning the paths to the saved users and tweets CSV files.
+    - Returns the paths to the saved users and tweets CSV files.
+
+### Handling No Data
+
+If the data is `None`:
+- Logs that there is no data to transform and exits the transformation phase.
+- Returns `None, None`.
 
 ### Loading
 
@@ -500,28 +505,32 @@ The `load_to_s3` function uploads files to an AWS S3 bucket. It takes the file p
     - Returning `False` to indicate a failed upload.
 
 ### Main Function
-The `main` function orchestrates the ETL process by calling the extraction, transformation, and loading functions sequentially. It logs the start and completion of the ETL pipeline.
+
+The `main` function orchestrates the ETL process by calling the extraction, transformation, and loading functions sequentially. It ensures each phase of the ETL pipeline completes successfully and logs the process throughout.
 
 ### Steps Performed in the ETL Pipeline
 
 1. **Starting the ETL Pipeline:**
-    - Logging the start of the ETL pipeline.
+    - Logs the initiation of the ETL pipeline process.
 
 2. **Extraction Phase:**
-    - Calling the `extract_api` function to extract raw tweet data.
-    - Receiving the raw data and the path to the saved raw data file.
+    - Calls the `extract_api` function to fetch raw tweet data from the Twitter API.
+    - Receives the raw data and the path to the saved raw data file.
+    - Checks if the extraction was successful. If not, logs the failure and exits the pipeline.
 
 3. **Transformation Phase:**
-    - Calling the `transform` function to transform the extracted raw data into structured CSV files.
-    - Receiving the paths to the saved users and tweets CSV files.
+    - Calls the `transform` function to convert the extracted raw data into structured CSV files.
+    - Receives the paths to the generated users and tweets CSV files.
+    - Checks if the transformation was successful. If not, logs the failure and exits the pipeline.
 
 4. **Loading Phase:**
-    - Uploading the raw data file to the S3 bucket by calling `load_to_s3`.
-    - Uploading the users CSV file to the S3 bucket by calling `load_to_s3`.
-    - Uploading the tweets CSV file to the S3 bucket by calling `load_to_s3`.
+    - Uploads the raw data file to the S3 bucket using the `load_to_s3` function.
+    - Uploads the users CSV file to the S3 bucket using the `load_to_s3` function.
+    - Uploads the tweets CSV file to the S3 bucket using the `load_to_s3` function.
 
 5. **Completing the ETL Pipeline:**
-    - Logging the completion of the ETL pipeline.
+    - Logs the successful completion of the ETL pipeline.
+
 
 ## GitHub Actions
 ### Weekly ETL Workflow

@@ -174,6 +174,11 @@ def extract_api(url="https://twitter-api45.p.rapidapi.com/search.php"):
         
         data = response.json()
 
+        # Check if the data is empty or None
+        if not data or 'timeline' not in data:
+            logging('No data received from API or unexpected data format.')
+            return None, None
+
         # Deduplicate tweets
         new_hashes = set()
         for tweet in data.get('timeline', []):
@@ -197,14 +202,18 @@ def extract_api(url="https://twitter-api45.p.rapidapi.com/search.php"):
             logging(f'Moving to the next cursor: {next_cursor}')  # Log moving to the next cursor
 
     # Saving raw data
-    logging('Saving raw data to file')
-    with open(raw_file_format, 'w') as json_file:
-        json.dump(all_data, json_file, indent=4)
-    logging(f'Successfully saved raw data to {raw_file_format}')
-
+    if all_data:
+        logging('Saving raw data to file')
+        with open(raw_file_format, 'w') as json_file:
+            json.dump(all_data, json_file, indent=4)
+        logging(f'Successfully saved raw data to {raw_file_format}')
+    else:
+        logging('No data to save.')
+    
     save_processed_hashes(processed_hashes_file, new_hashes)  # Save new tweet hashes
     logging('Finished the Extraction Phase')
     return all_data, raw_file_format
+
 
 # Transform Function
 def transform(data):
@@ -217,6 +226,10 @@ def transform(data):
     Returns:
         tuple: A tuple containing the paths to the saved users and tweets CSV files.
     """
+    if data is None:
+        logging('No data to transform. Exiting transformation phase.')
+        return None, None
+
     logging('Starting the Transformation Phase')
      
     # URL extraction pattern
@@ -367,8 +380,16 @@ def main():
     # Extraction
     raw_data, raw_data_path = extract_api()
     
+    if raw_data is None:
+        logging('Extraction failed. Exiting ETL pipeline.')
+        return
+
     # Transformation
     users_csv, tweets_csv = transform(raw_data)
+    
+    if users_csv is None or tweets_csv is None:
+        logging('Transformation failed. Exiting ETL pipeline.')
+        return
     
     # Loading
     load_to_s3(raw_data_path, BUCKET_NAME, f'raw/{raw_file_name}')
@@ -376,6 +397,7 @@ def main():
     load_to_s3(tweets_csv, BUCKET_NAME, f'processed/users_tweet/tweets_{formatted_time}.csv')
     
     logging('Finished the ETL pipeline')
+
 
 if __name__ == "__main__":
     main()
