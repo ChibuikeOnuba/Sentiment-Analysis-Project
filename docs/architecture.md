@@ -624,8 +624,8 @@ This workflow triggers on every push to any branch and performs the following st
 #### Step 1: Clone the Repository
 First, clone the repository to your local machine using Git:
 ```bash
-git clone https://github.com/Chideraozigbo/sentiment-analysis-project.git
-cd sentiment-analysis-project
+git https://github.com/ChibuikeOnuba/Sentiment-Analysis-Project.git
+cd Sentiment-Analysis-Project
 ```
 
 ### 3. Create a Virtual Environment
