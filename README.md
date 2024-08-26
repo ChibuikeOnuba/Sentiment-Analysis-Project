@@ -138,7 +138,7 @@ Here are the lists of brands that was considered before we chose Piggvest.
 
 
 ## System Architecture
-
+### Data Engineering
 Data Flow:
 1.	Data Extraction: Tweets are extracted from the Twitter API using a Python script.
 2.	Data Storage: The raw tweet data is stored as JSON files in the `data/raw/` directory.
@@ -152,4 +152,34 @@ Data Flow:
 ![architecture Diagram](docs/images/architecture.gif)
 
 ## Technology Stack
+----
+
+### Data Science
+Data Flow:
+1. Data Collection: Using a Jupyter notebook, the structured CSV files are collected from the assigned Snowflake data warehouse. This process is automated to ensure the notebook works on any new available data in the warehouse
+2. Data Cleaning and Preprocessing: To ensure accurate analysis, the data is further cleaned. This process involves removing irrelevant information (e.g., URLs, mentions, special characters) and normalizing text (lowercase conversion, tokenization, stopword removal, lemmatization/stemming). This step ensures that the data is in a consistent format for analysis.
+3. Feature Engineering and Sentiment Extraction: Using the training weights from the Hugging Face' pre-trained model- Roberta, the data is classified into negative, neutral, or positive.
+4. EDA: EDA is performed to understand the data distribution and identify patterns or trends. Visualizations such as word clouds and sentiment distributions are created to inform model development.
+
+## Technology Stack
+
+**Python:** Python was the primary programming language used throughout the project. It was employed for scripting, data manipulation, and implementing the entire sentiment analysis pipeline, including data extraction, cleaning, feature engineering, and sentiment extraction.
+
+**Jupyter Notebook:** Jupyter Notebook was used as an interactive development environment for experimenting with data processing steps, visualizing results, and documenting the analysis process. It enabled quick iteration and visualization of data during exploratory data analysis (EDA) and model evaluation. 
+
+**Snowflake:** Snowflake served as the data warehouse where the processed tweet data was stored and analyzed. After data transformation and loading into AWS S3, Snowpipe was used to automatically ingest the data into Snowflake, where it could be queried and used for downstream analysis. Data from the analysis are also stored in the warehouse.
+
+**NLTK (Natural Language Toolkit):** NLTK was utilized for basic text preprocessing tasks such as tokenization, stopword removal, and lemmatization. These steps were essential in preparing the tweet data for more advanced feature extraction methods.
+
+**RoBERTa:** RoBERTa, a pre-trained transformer model from Hugging Face, was used for feature engineering and sentiment extraction. The model provided high-quality contextual embeddings that were fed into the sentiment analysis classifier, helping to improve the accuracy and robustness of the predictions.
+
+**SpaCy:** SpaCy was used for advanced NLP tasks such as named entity recognition (NER) and dependency parsing. It complemented the preprocessing pipeline by offering efficient, pre-built tools for parsing and understanding tweet text structure, enhancing the feature extraction process.
+
+### Architecture Diagram:
+
+![dscarchitecture Diagram](docs/images/dscarchitecture.png)
+
+
+
+
 
