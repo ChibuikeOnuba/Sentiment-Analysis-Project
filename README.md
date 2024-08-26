@@ -163,17 +163,17 @@ Data Flow:
 
 ## Technology Stack
 
-**Python:** Python was the primary programming language used throughout the project. It was employed for scripting, data manipulation, and implementing the entire sentiment analysis pipeline, including data extraction, cleaning, feature engineering, and sentiment extraction.
+- **Python:** Python was the primary programming language used throughout the project. It was employed for scripting, data manipulation, and implementing the entire sentiment analysis pipeline, including data extraction, cleaning, feature engineering, and sentiment extraction.
 
-**Jupyter Notebook:** Jupyter Notebook was used as an interactive development environment for experimenting with data processing steps, visualizing results, and documenting the analysis process. It enabled quick iteration and visualization of data during exploratory data analysis (EDA) and model evaluation. 
+- **Jupyter Notebook:** Jupyter Notebook was used as an interactive development environment for experimenting with data processing steps, visualizing results, and documenting the analysis process. It enabled quick iteration and visualization of data during exploratory data analysis (EDA) and model evaluation. 
 
-**Snowflake:** Snowflake served as the data warehouse where the processed tweet data was stored and analyzed. After data transformation and loading into AWS S3, Snowpipe was used to automatically ingest the data into Snowflake, where it could be queried and used for downstream analysis. Data from the analysis are also stored in the warehouse.
+- **Snowflake:** Snowflake served as the data warehouse where the processed tweet data was stored and analyzed. After data transformation and loading into AWS S3, Snowpipe was used to automatically ingest the data into Snowflake, where it could be queried and used for downstream analysis. Data from the analysis are also stored in the warehouse.
 
-**NLTK (Natural Language Toolkit):** NLTK was utilized for basic text preprocessing tasks such as tokenization, stopword removal, and lemmatization. These steps were essential in preparing the tweet data for more advanced feature extraction methods.
+- **NLTK (Natural Language Toolkit):** NLTK was utilized for basic text preprocessing tasks such as tokenization, stopword removal, and lemmatization. These steps were essential in preparing the tweet data for more advanced feature extraction methods.
 
-**RoBERTa:** RoBERTa, a pre-trained transformer model from Hugging Face, was used for feature engineering and sentiment extraction. The model provided high-quality contextual embeddings that were fed into the sentiment analysis classifier, helping to improve the accuracy and robustness of the predictions.
+- **RoBERTa:** RoBERTa, a pre-trained transformer model from Hugging Face, was used for feature engineering and sentiment extraction. The model provided high-quality contextual embeddings that were fed into the sentiment analysis classifier, helping to improve the accuracy and robustness of the predictions.
 
-**SpaCy:** SpaCy was used for advanced NLP tasks such as named entity recognition (NER) and dependency parsing. It complemented the preprocessing pipeline by offering efficient, pre-built tools for parsing and understanding tweet text structure, enhancing the feature extraction process.
+- **SpaCy:** SpaCy was used for advanced NLP tasks such as named entity recognition (NER) and dependency parsing. It complemented the preprocessing pipeline by offering efficient, pre-built tools for parsing and understanding tweet text structure, enhancing the feature extraction process.
 
 ### Architecture Diagram:
 
