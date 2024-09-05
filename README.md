@@ -179,7 +179,7 @@ Data Flow:
 
 ![dscarchitecture Diagram](docs/images/dscarchitecture.png)
 
-
+Read full documentation [here](docs/sentiment_analysis_documentation.docx)
 
 
 
